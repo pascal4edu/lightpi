@@ -1,0 +1,198 @@
+object Form1: TForm1
+  Left = 343
+  Height = 341
+  Top = 144
+  Width = 358
+  Caption = 'Calculator Demo'
+  ClientHeight = 341
+  ClientWidth = 358
+  LCLVersion = '1.6.4.0'
+  object Edit1: TEdit
+    Left = 26
+    Height = 23
+    Top = 22
+    Width = 312
+    ReadOnly = True
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 24
+    Height = 49
+    Top = 64
+    Width = 56
+    Caption = '9'
+    OnClick = add_caption
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 88
+    Height = 49
+    Top = 64
+    Width = 56
+    Caption = '8'
+    OnClick = add_caption
+    TabOrder = 2
+  end
+  object Button3: TButton
+    Left = 152
+    Height = 49
+    Top = 64
+    Width = 56
+    Caption = '7'
+    OnClick = add_caption
+    TabOrder = 3
+  end
+  object Button4: TButton
+    Left = 216
+    Height = 49
+    Top = 64
+    Width = 56
+    Caption = '('
+    OnClick = add_caption
+    TabOrder = 4
+  end
+  object Button5: TButton
+    Left = 26
+    Height = 49
+    Top = 128
+    Width = 56
+    Caption = '6'
+    OnClick = add_caption
+    TabOrder = 5
+  end
+  object Button6: TButton
+    Left = 90
+    Height = 49
+    Top = 128
+    Width = 56
+    Caption = '5'
+    OnClick = add_caption
+    TabOrder = 6
+  end
+  object Button7: TButton
+    Left = 154
+    Height = 49
+    Top = 128
+    Width = 56
+    Caption = '4'
+    OnClick = add_caption
+    TabOrder = 7
+  end
+  object Button8: TButton
+    Left = 218
+    Height = 49
+    Top = 128
+    Width = 56
+    Caption = '+'
+    OnClick = add_caption
+    TabOrder = 8
+  end
+  object Button9: TButton
+    Left = 26
+    Height = 49
+    Top = 192
+    Width = 56
+    Caption = '3'
+    OnClick = add_caption
+    TabOrder = 9
+  end
+  object Button10: TButton
+    Left = 90
+    Height = 49
+    Top = 192
+    Width = 56
+    Caption = '2'
+    OnClick = add_caption
+    TabOrder = 10
+  end
+  object Button11: TButton
+    Left = 154
+    Height = 49
+    Top = 192
+    Width = 56
+    Caption = '1'
+    OnClick = add_caption
+    TabOrder = 11
+  end
+  object Button12: TButton
+    Left = 218
+    Height = 49
+    Top = 192
+    Width = 56
+    Caption = '*'
+    OnClick = add_caption
+    TabOrder = 12
+  end
+  object Button13: TButton
+    Left = 26
+    Height = 49
+    Top = 256
+    Width = 56
+    Caption = '0'
+    OnClick = add_caption
+    TabOrder = 13
+  end
+  object Button14: TButton
+    Left = 90
+    Height = 49
+    Top = 256
+    Width = 56
+    Caption = '.'
+    OnClick = add_caption
+    TabOrder = 14
+  end
+  object Button15: TButton
+    Left = 154
+    Height = 49
+    Top = 256
+    Width = 56
+    Caption = 'E'
+    OnClick = add_caption
+    TabOrder = 15
+  end
+  object ButtonClear: TButton
+    Left = 218
+    Height = 49
+    Top = 256
+    Width = 56
+    Caption = 'C'
+    OnClick = ButtonClearClick
+    TabOrder = 16
+  end
+  object Button17: TButton
+    Left = 280
+    Height = 49
+    Top = 64
+    Width = 56
+    Caption = ')'
+    OnClick = add_caption
+    TabOrder = 17
+  end
+  object Button18: TButton
+    Left = 282
+    Height = 49
+    Top = 128
+    Width = 56
+    Caption = '-'
+    OnClick = add_caption
+    TabOrder = 18
+  end
+  object Button19: TButton
+    Left = 282
+    Height = 49
+    Top = 192
+    Width = 56
+    Caption = '/'
+    OnClick = add_caption
+    TabOrder = 19
+  end
+  object ButtonExecute: TButton
+    Left = 282
+    Height = 49
+    Top = 256
+    Width = 56
+    Caption = '='
+    OnClick = ButtonExecuteClick
+    TabOrder = 20
+  end
+end
