@@ -1,0 +1,1 @@
+simple calculator demo, each button adds its own caption to a string which gets evaluated e.g. [ 5 ] [ + ] [ 2 ]
