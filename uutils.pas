@@ -87,6 +87,7 @@ begin
     CopVariable: Result := 'var';
     CopString: Result := 'string';
     CopNumber: Result := 'number';
+    CopRound: Result := 'round';
     CopWriteln: Result := 'writeln';
     else Result := '<Unknown Operation ID ' + IntToStr(op) + '!>';
   end;

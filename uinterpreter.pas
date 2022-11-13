@@ -181,7 +181,7 @@ begin
 
     CopMathDivInt:
       begin
-        temp := round(evaluate(node.secondChild));
+        temp := round(StrToFloat(evaluate(node.secondChild)));
 
         if temp = 0 then
           LogError('Division by Zero', node.line, node.operation)
@@ -252,6 +252,9 @@ begin
           evaluate(node.fourthChild);
         end;
       end;
+
+    CopRound:
+      Result := round(StrToFloat(evaluate(node.firstChild)));
 
     CopWriteln:
       begin

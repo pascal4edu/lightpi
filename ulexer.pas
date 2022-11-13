@@ -183,14 +183,16 @@ begin
     end;
 
     FreeAndNil(tokenlist);
-  end;
-
-  // Debug: output our list of token...
-  if ClpiDebugMode then
-  for i := 0 to tokenlist.Count - 1 do
+  end
+  else
   begin
-    with TToken(tokenlist.Items(i)) do
-      messages.Add(IntToStr(line) + ' ' + tokentostr(id) + ': ' + s);
+    // Debug: output our list of token...
+    if ClpiDebugMode then
+    for i := 0 to tokenlist.Count - 1 do
+    begin
+      with TToken(tokenlist.Items(i)) do
+        messages.Add(IntToStr(line) + ' ' + tokentostr(id) + ': ' + s);
+    end;
   end;
 
   Result := tokenlist;

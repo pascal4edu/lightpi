@@ -44,7 +44,13 @@ const
   CopVariable = 24;
   CopString = 25;
   CopNumber = 26;
+
+  // Math (add more if needed...)
+  CopRound = 50;
+
+  // General Purpose and I/O (add more if needed...)
   CopWriteln = 100;
+
   CopInvalid = 255;
 
 implementation

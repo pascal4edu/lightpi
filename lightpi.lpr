@@ -10,6 +10,7 @@ var lpi: TLightPascalInterpreter;
 begin
   // see uconstants.pas for options, true enables debug output
   lpi := TLightPascalInterpreter.Create(true);
+
   lpi.Load(
     'for i := 1 to 5 do ' +
     'begin ' +

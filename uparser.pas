@@ -263,6 +263,13 @@ begin
     Result := create_node(CopLogicFalse, '', current_line); // accept False
   end
   else
+  if accept('round') then // accept round(x);
+  begin
+    Result := create_node(CopRound, '', current_line); // round
+    if not peek('(') then expect('('); // force ()
+    Result.children.Add(add_expr());
+  end
+  else
   if token.id = CtokenIdentifier then
   begin
     // add it as variable, save the name in case of an error message
@@ -318,7 +325,6 @@ end;
 // order of math operations is set by the order of procedure calls
 // calling the next higher one as first line to check if the expression is known (accepted)
 function mul_expr: TASTTreeNode;
-var line: Integer;
 begin
   Result := nil;
 
@@ -326,26 +332,25 @@ begin
   Result := prim_expr();
   if isError then Exit;
 
-  line := preview_token.line;
+  current_line := preview_token.line;
   while (peek('*') or peek('/') or peek('mod') or peek ('div')) and (not isError) do
   begin
     if accept('*') then
-      Result := create_binary_node(CopMathMul, '', line, Result, prim_expr()) // accept *
+      Result := create_binary_node(CopMathMul, '', current_line, Result, prim_expr()) // accept *
     else
     if accept('/') then
-      Result := create_binary_node(CopMathDiv, '', line, Result, prim_expr()) // accept /
+      Result := create_binary_node(CopMathDiv, '', current_line, Result, prim_expr()) // accept /
     else
     if accept('mod') then
-      Result := create_binary_node(CopMathMod, '', line, Result, prim_expr()) // accept mod
+      Result := create_binary_node(CopMathMod, '', current_line, Result, prim_expr()) // accept mod
     else
     if accept('div') then
-      Result := create_binary_node(CopMathDivInt, '', line, Result, prim_expr()); // accept div
+      Result := create_binary_node(CopMathDivInt, '', current_line, Result, prim_expr()); // accept div
   end;
 end;
 
 // lower math expressions
 function add_expr: TASTTreeNode;
-var line: Integer;
 begin
   Result := nil;
 
@@ -353,20 +358,19 @@ begin
   Result := mul_expr();
   if isError then Exit;
 
-  line := preview_token.line;
+  current_line := preview_token.line;
   while (peek('+') or peek('-')) and (not isError) do
   begin
     if accept('+') then
-      Result := create_binary_node(CopMathAdd, '', line, Result, mul_expr()) // accept +
+      Result := create_binary_node(CopMathAdd, '', current_line, Result, mul_expr()) // accept +
     else
     if accept('-') then
-      Result := create_binary_node(CopMathSub, '', line, Result, mul_expr()); // accept -
+      Result := create_binary_node(CopMathSub, '', current_line, Result, mul_expr()); // accept -
   end;
 end;
 
 // compare operators
 function eq_expr: TASTTreeNode;
-var line: Integer;
 begin
   Result := nil;
 
@@ -374,29 +378,28 @@ begin
   Result := add_expr();
   if isError then Exit;
 
-  line := preview_token.line;
+  current_line := preview_token.line;
   if accept('=') then
-    Result := create_binary_node(CopCompareEqual, '', line, Result, add_expr()) // accept =
+    Result := create_binary_node(CopCompareEqual, '', current_line, Result, add_expr()) // accept =
   else
   if accept('<>') then
-    Result := create_binary_node(CopCompareUnequal, '', line, Result, add_expr()) // accept <>
+    Result := create_binary_node(CopCompareUnequal, '', current_line, Result, add_expr()) // accept <>
   else
   if accept('>') then
-    Result := create_binary_node(CopCompareGreater, '', line, Result, add_expr()) // accept >
+    Result := create_binary_node(CopCompareGreater, '', current_line, Result, add_expr()) // accept >
   else
   if accept('<') then
-    Result := create_binary_node(CopCompareSmaller, '', line, Result, add_expr()) // accept <
+    Result := create_binary_node(CopCompareSmaller, '', current_line, Result, add_expr()) // accept <
   else
   if accept('>=') then
-    Result := create_binary_node(CopCompareGreaterOrEqual, '', line, Result, add_expr()) // accept >=
+    Result := create_binary_node(CopCompareGreaterOrEqual, '', current_line, Result, add_expr()) // accept >=
   else
   if accept('<=') then
-    Result := create_binary_node(CopCompareSmallerOrEqual, '', line, Result, add_expr()); // accept <=
+    Result := create_binary_node(CopCompareSmallerOrEqual, '', current_line, Result, add_expr()); // accept <=
 end;
 
 // logic
 function logic_expr: TASTTreeNode;
-var line: Integer;
 begin
   Result := nil;
 
@@ -404,20 +407,19 @@ begin
   Result := eq_expr();
   if isError then Exit;
 
-  line := preview_token.line;
+  current_line := preview_token.line;
   while (peek('and') or peek('or')) and (not isError) do
   begin
     if accept('and') then
-      Result := create_binary_node(CopLogicAnd, '', line, Result, eq_expr()) // accept and
+      Result := create_binary_node(CopLogicAnd, '', current_line, Result, eq_expr()) // accept and
     else
     if accept('or') then
-      Result := create_binary_node(CopLogicOr, '', line, Result, eq_expr()); // accept or
+      Result := create_binary_node(CopLogicOr, '', current_line, Result, eq_expr()); // accept or
   end;
 end;
 
 // assignment
 function expr: TASTTreeNode;
-var line: Integer;
 begin
   Result := nil;
 
@@ -425,31 +427,30 @@ begin
   Result := logic_expr();
   if isError then Exit;
 
-  line := preview_token.line;
+  current_line := preview_token.line;
 
   // is it an assignment? check the left and get the right side of the assignment...
   if accept(':=') then
   begin
     if not expectVariable(Result, CopAssign) then Exit; // left side has to be a variable
 
-    Result := create_binary_node(CopAssign, '', line, Result, logic_expr()); // accept :=
+    Result := create_binary_node(CopAssign, '', current_line, Result, logic_expr()); // accept :=
   end;
 end;
 
 // recognizes a statement like a "begin end" block or a "for to do" loop
 function statement: TASTTreeNode;
-var line: Integer;
-    tempNode: TASTTreeNode;
+var tempNode: TASTTreeNode;
 begin
   Result := nil;
 
   if isError then Exit;
 
-  line := preview_token.line;
+  current_line := preview_token.line;
 
   if accept('begin') then
   begin
-    Result := create_node(CopCommandBlock, '', line); // accept begin-end
+    Result := create_node(CopCommandBlock, '', current_line); // accept begin-end
 
     while not accept('end') and (not isError) do Result.children.Add(statement());
 
@@ -458,7 +459,7 @@ begin
   else
   if accept('if') then
   begin
-    Result := create_binary_node(CopCondition, '', line, logic_expr(), nil); // accept condition
+    Result := create_binary_node(CopCondition, '', current_line, logic_expr(), nil); // accept condition
 
     expect('then');
 
@@ -470,14 +471,14 @@ begin
   else
   if accept('while') then
   begin
-    Result := create_binary_node(CopLoopWhile, '', line, logic_expr(), nil); // accept while (condition)
+    Result := create_binary_node(CopLoopWhile, '', current_line, logic_expr(), nil); // accept while (condition)
     expect('do');
     Result.children.Add(statement()); // statement
   end
   else
   if accept('repeat') then
   begin
-    Result := create_node(CopLoopRepeatUntil, '', line); // accept repeat until
+    Result := create_node(CopLoopRepeatUntil, '', current_line); // accept repeat until
 
     while not accept('until') and (not isError) do Result.children.Add(statement());
 
@@ -493,7 +494,7 @@ begin
 
     if not expectVariable(tempNode, CopLoopForTo) then Exit;
 
-    Result := create_binary_node(CopLoopForTo, '', line, tempNode, nil); // add the loop variable i
+    Result := create_binary_node(CopLoopForTo, '', current_line, tempNode, nil); // add the loop variable i
 
     expect(':=');
 
@@ -510,7 +511,7 @@ begin
     expect('(');
 
     // at least one argument is expected, so don't use a while loop to check
-    Result := create_node(CopWriteln, '', line); // messages.Add
+    Result := create_node(CopWriteln, '', current_line); // messages.Add
     repeat
       tempNode := logic_expr(); // logic_expr because no lower levels are allowed (e.g. no statements like messages.Add(repeat ... until...);)
       Result.children.Add(tempNode);

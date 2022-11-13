@@ -21,8 +21,10 @@ type TLightPascalInterpreter = class(TObject)
          function GetVariable(name: AnsiString): Variant;
          procedure SetVariable(name: AnsiString; value: Variant);
          function Execute: Boolean;
-         function GetMessages: TStringList;
-         procedure PrintMessages;
+         function isError: Boolean;
+         procedure ClearMessages;
+         function GetMessages(clear: Boolean = False): TStringList;
+         procedure PrintMessages(clear: Boolean = False);
          Destructor Destroy; override;
      end;
 
@@ -89,7 +91,19 @@ begin
   Result := not interpreter.isError;
 end;
 
-function TLightPascalInterpreter.Getmessages: TStringList;
+function TLightPascalInterpreter.isError: Boolean;
+begin
+  Result := lexer.isError or parser.isError or interpreter.isError;
+end;
+
+procedure TLightPascalInterpreter.ClearMessages;
+begin
+  lexer.messages.Clear;
+  parser.messages.Clear;
+  interpreter.messages.Clear;
+end;
+
+function TLightPascalInterpreter.GetMessages(clear: Boolean = False): TStringList;
 var i: Integer;
     sl: TStringList;
 begin
@@ -104,15 +118,17 @@ begin
   for i := 0 to interpreter.messages.Count - 1 do
     sl.Add(interpreter.messages[i]);
 
+  if clear then ClearMessages;
+
   Result := sl;
 end;
 
 
 // messages can easily be processed in other ways if needed
-procedure TLightPascalInterpreter.PrintMessages;
+procedure TLightPascalInterpreter.PrintMessages(clear: Boolean = False);
 var total_messages: TStringList;
 begin
-  total_messages := GetMessages;
+  total_messages := GetMessages(clear);
 
   while total_messages.Count > 0 do
   begin
