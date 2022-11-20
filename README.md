@@ -21,9 +21,9 @@ The following internal procedures / functions are currently implemented and can 
 * WriteLn
 
 ## Usage
-LPI has mostly been created for education. Most pascal interpreters written for eduaction are very simple and don't support enough features of the pascal language. On the other hand there are huge complex projects which work great, but they are difficult to understand and modify. LPI tries to be inbetween those projects. Simple enough to understand, yet providing enough features to get users started to modify and explore. LPI has been implemented as a self contained **TLightPascalInterpreter** class in **ulpi.pas**. LPI comes with a set of unit tests to verify the interpreter is working correctly.
+LPI has mostly been created for education. Most pascal interpreters written for eduaction are very simple and don't support enough features of the pascal language. On the other hand there are huge complex projects which work great, with the downside of being more difficult to understand and modify. LPI tries to be inbetween those projects. Simple enough to understand, yet providing enough features to get users started to modify and explore. LPI has been implemented as a self contained **TLightPascalInterpreter** class in **ulpi.pas**. LPI comes with a set of unit tests to verify the interpreter is working correctly.
 
-This is how to load and execute a script:
+How to load and execute a script:
 
 ```pascal
 var lpi: TLightPascalInterpreter;
@@ -35,7 +35,7 @@ begin
 end;  
 ```
 
-Which produces the following output:
+Script output:
 
 ```
 1x Hello World!
@@ -81,7 +81,6 @@ Each interpreter stage can output debugging information, to better understand th
 
 # Variable State Dump
 i := 3
-a := 2
 
 # Execution halted.
 ```
