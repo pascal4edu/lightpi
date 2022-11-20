@@ -21,7 +21,7 @@ The following internal procedures / functions are currently implemented and can 
 * WriteLn
 
 ## Usage
-LPI has mostly been created for education. Most pascal interpreters available are either too simple and don't support enough of the pascal language. On the other hand there are huge complex projects which work great, but they are difficult to understand and modify. LPI tries to be inbewteen those projects, simple enough to understand, with enough features to get users started to modify and explore. LPI has been implemented as a self contained **TLightPascalInterpreter** class in **ulpi.pas**. LPI comes with a set of unit tests to verify the interpreter is working correctly.
+LPI has mostly been created for education. Most pascal interpreters written for eduaction are very simple and don't support enough features of the pascal language. On the other hand there are huge complex projects which work great, but they are difficult to understand and modify. LPI tries to be inbetween those projects. Simple enough to understand, yet providing enough features to get users started to modify and explore. LPI has been implemented as a self contained **TLightPascalInterpreter** class in **ulpi.pas**. LPI comes with a set of unit tests to verify the interpreter is working correctly.
 
 This is how to load and execute a script:
 
@@ -35,7 +35,15 @@ begin
 end;  
 ```
 
-Each interpreter stage can output debugging information, to better understand the code. Debugging can be enabled like this TLightPascalInterpreter.Create(true); and will produce the following output for the example script from above:
+Which produces the following output:
+
+```
+1x Hello World!
+2x Hello World!
+3x Hello World!
+```
+
+Each interpreter stage can output debugging information, to better understand the code. Debugging can be enabled like this ***TLightPascalInterpreter.Create(true);*** and will produce the following output for the example script mentioned above:
 
 ```
 *** Lexer ***
@@ -79,4 +87,4 @@ a := 2
 ```
 
 
-Please have a look at the included examples for more details and inspiration.
+The interpreter directly executes the resulting syntax tree to keep the code simple. Please have a look at the included examples for more details and inspiration.
