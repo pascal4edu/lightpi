@@ -191,7 +191,7 @@ begin
 
     CopMathMod:
       begin
-        temp := evaluate(node.secondChild);
+        temp := round(StrToFloat(evaluate(node.secondChild)));
 
         if temp = 0 then
           LogError('Modulo by Zero', node.line, node.operation)
