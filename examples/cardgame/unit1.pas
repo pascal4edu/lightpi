@@ -76,8 +76,8 @@ begin
   lpi.SetVariable('e_hp', e_hp.Value);
   if lpi.Execute then
   begin
-    hp.Value := lpi.GetVariable('hp');
-    e_hp.Value := lpi.GetVariable('e_hp');
+    hp.Value := Integer(lpi.GetVariable('hp'));
+    e_hp.Value := Integer(lpi.GetVariable('e_hp'));
   end
   else ShowMessage('An Error occured during script execution!');
 
@@ -94,7 +94,7 @@ begin
   // opponent turn, hp and e_hp are switched!
   e_card_no := random(CMaxCards);
   Memo1.Lines.Add('[Opponent] Executing Card ' + CCards[e_card_no].name + '...');
-  execute_card_script(CCards[card_no].script, SpinEdit2, SpinEdit1);
+  execute_card_script(CCards[e_card_no].script, SpinEdit2, SpinEdit1);
 
   if (SpinEdit1.Value = 0) and (SpinEdit2.Value = 0) then
     ShowMessage('It''s a draw.')
