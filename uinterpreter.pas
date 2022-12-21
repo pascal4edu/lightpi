@@ -12,6 +12,7 @@ type Tvariables = array of Variant;
          variables: Tvariables;
 
          procedure dump_variables(symbols: TStringList);
+         function get_var_id(var_symbol: AnsiString; symbols: TStringList): Integer;
 
        public
          procedure init_variables(varcount: Integer);
@@ -49,48 +50,44 @@ begin
     messages.Add(padstring(symbols[i], max_name_length) + ' := ' + AnsiString(variables[i]));
 end;
 
-function TLPI_Interpreter.get_variable(var_symbol: AnsiString; symbols: TStringList): Variant;
+// internal helper function
+function TLPI_Interpreter.get_var_id(var_symbol: AnsiString; symbols: TStringList): Integer;
 var i: Integer;
-    found: Boolean;
 begin
-  found := false;
-  Result := '';
-  var_symbol := LowerCase(var_symbol);
+  Result := CvarInvalid;
 
   for i := 0 to High(variables) do
     if LowerCase(symbols[i]) = var_symbol then
     begin
-      Result := variables[i];
-      found := true;
+      Result := i;
       Break;
     end;
+end;
 
-  // not found? set error state
-  if not found then
+function TLPI_Interpreter.get_variable(var_symbol: AnsiString; symbols: TStringList): Variant;
+var id: Integer;
+begin
+  Result := '';
+  id := get_var_id(LowerCase(var_symbol), symbols);
+
+  if id <> CvarInvalid then
+    Result := variables[id]
+  else
     LogError('Requested Variable ' + var_symbol + ' could not be found!', -1, -1);
 end;
 
 procedure TLPI_Interpreter.set_variable(var_symbol: AnsiString; var_value: Variant; symbols: TStringList);
-var i: Integer;
-    found: Boolean;
+var id: Integer;
 begin
-  found := false;
-  var_symbol := LowerCase(var_symbol);
+  id := get_var_id(LowerCase(var_symbol), symbols);
 
-  for i := 0 to High(variables) do
-    if LowerCase(symbols[i]) = var_symbol then
-    begin
-      variables[i] := var_value;
-      found := true;
-      Break;
-    end;
-
-  // not found? add the symbol + value
-  if not found then
+  if id <> CvarInvalid then
+    variables[id] := var_value
+  else
   begin
     SetLength(variables, Length(variables) + 1); // expand array
-    variables[High(variables)] := var_value; // set the last value
-    symbols.Add(var_symbol); // also add a matching symbol
+    variables[High(variables)] := var_value; // set the value
+    symbols.Add(var_symbol); // add the matching symbol
   end;
 end;
 
@@ -208,7 +205,7 @@ begin
           evaluate(node.secondChild)
         else
         begin
-          // only execute else node if it's present
+          // only execute the else node if it is attached
           if node.children.Count > 2 then
             evaluate(node.thirdChild);
         end;
@@ -262,7 +259,7 @@ begin
         for i := 0 to node.children.Count - 1 do
           s := s + AnsiString(evaluate(node.getChild(i)));
 
-          messages.Add(s);
+        messages.Add(s);
       end;
 
     else

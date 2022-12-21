@@ -10,6 +10,8 @@ const
   ClpiInterpreterMaxVariables = 30; // amount of allowed unique variable names
   ClpiInterpreterMaxLoopCycles: Integer = 1000; // how many cycles each loop is allowed to run...
 
+  CvarInvalid = -1; // invalid variable id
+
   CtokenIdentifier = 1;
   CtokenOperator = 2;
   CtokenString = 3;
