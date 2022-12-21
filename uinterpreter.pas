@@ -12,7 +12,7 @@ type Tvariables = array of Variant;
          variables: Tvariables;
 
          procedure dump_variables(symbols: TStringList);
-         function get_var_id(var_symbol: AnsiString; symbols: TStringList): Integer;
+         function var_symbol_to_id(var_symbol: AnsiString; symbols: TStringList): Integer;
 
        public
          procedure init_variables(varcount: Integer);
@@ -51,10 +51,10 @@ begin
 end;
 
 // internal helper function
-function TLPI_Interpreter.get_var_id(var_symbol: AnsiString; symbols: TStringList): Integer;
+function TLPI_Interpreter.var_symbol_to_id(var_symbol: AnsiString; symbols: TStringList): Integer;
 var i: Integer;
 begin
-  Result := CvarInvalid;
+  Result := Cunknown_var_id;
 
   for i := 0 to High(variables) do
     if LowerCase(symbols[i]) = var_symbol then
@@ -68,20 +68,20 @@ function TLPI_Interpreter.get_variable(var_symbol: AnsiString; symbols: TStringL
 var id: Integer;
 begin
   Result := '';
-  id := get_var_id(LowerCase(var_symbol), symbols);
+  id := var_symbol_to_id(LowerCase(var_symbol), symbols);
 
-  if id <> CvarInvalid then
+  if id <> Cunknown_var_id then
     Result := variables[id]
   else
-    LogError('Requested Variable ' + var_symbol + ' could not be found!', -1, -1);
+    LogError('Requested Variable ' + var_symbol + ' could not be found!', Cunknown_line, Cunknown_operation);
 end;
 
 procedure TLPI_Interpreter.set_variable(var_symbol: AnsiString; var_value: Variant; symbols: TStringList);
 var id: Integer;
 begin
-  id := get_var_id(LowerCase(var_symbol), symbols);
+  id := var_symbol_to_id(LowerCase(var_symbol), symbols);
 
-  if id <> CvarInvalid then
+  if id <> Cunknown_var_id then
     variables[id] := var_value
   else
   begin
@@ -92,7 +92,7 @@ begin
 end;
 
 function TLPI_Interpreter.evaluate(node: TASTTreeNode): Variant;
-var i, loopCycles, for_from, for_to: Integer;
+var i, loopCycles, for_from, for_to, for_var_id: Integer;
     temp: Extended;
     s: AnsiString;
     var_a, var_b: Variant;
@@ -240,12 +240,14 @@ begin
       begin
         for_from := round(StrToFloat(evaluate(node.secondChild)));
         for_to := round(StrToFloat(evaluate(node.thirdChild)));
+        for_var_id := node.firstChild.var_id;
+
         if ((for_to - for_from) >= ClpiInterpreterMaxLoopCycles) then
           LogError('Possible infinite loop. Maximum allowed Cycles: ' + IntToStr(ClpiInterpreterMaxLoopCycles), node.line, CopLoopForTo);
 
         for i := for_from to for_to do
         begin
-          variables[node.firstChild.var_id] := i;
+          variables[for_var_id] := i;
           evaluate(node.fourthChild);
         end;
       end;

@@ -34,10 +34,10 @@ begin
 
   error_message := 'Error! ' + s;
 
-  if line <> -1 then
+  if line <> Cunknown_line then
     error_message := error_message + ' at Line ' + IntToStr(line);
 
-  if operation <> -1 then
+  if operation <> Cunknown_operation then
     error_message := error_message + ' for Operation ' + operationtostr(operation);
 
   messages.Add(error_message);

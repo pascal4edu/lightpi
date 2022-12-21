@@ -101,7 +101,7 @@ begin
                 get_ch; // skip the closing ' and break unless we have the '' exception to continue
                 if next_ch <> '''' then Break;
               end;
-        #10: LogError('String not terminated', line, -1);
+        #10: LogError('String not terminated', line, Cunknown_operation);
       end;
 
       s := s + get_ch;

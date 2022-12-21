@@ -59,7 +59,7 @@ var i, index: Integer;
     found: Boolean;
 begin
   s := LowerCase(s);
-  index := -1;
+  index := Cunknown_var_id;
   found := false;
 
   for i := 0 to symbols.Count - 1 do
@@ -74,7 +74,7 @@ begin
   if symbols.Count < ClpiInterpreterMaxVariables then
     index := symbols.Add(s)
   else
-    LogError('Internal Error. Maximum number of allowed variables reached (' + IntToStr(ClpiInterpreterMaxVariables) + ')', 0, -1);
+    LogError('Internal Error. Maximum number of allowed variables reached (' + IntToStr(ClpiInterpreterMaxVariables) + ')', Cunknown_line, Cunknown_operation);
 
   Result := index;
 end;
@@ -92,7 +92,7 @@ begin
 
   if tokenlist.Count < 1 then
   begin
-    LogError('Unexpected End of Program', current_line, -1);
+    LogError('Unexpected End of Program', current_line, Cunknown_operation);
     Result := error_token;
   end
   else Result := TToken(tokenlist.GetFirst);
@@ -135,7 +135,7 @@ end;
 procedure expect(s: AnsiString); inline;
 begin
   if not accept(s) then
-    LogError(s + ' expected, but ' + preview_token.s + ' found', current_line, -1);
+    LogError(s + ' expected, but ' + preview_token.s + ' found', current_line, Cunknown_operation);
 end;
 
 // the token is read and checked for a matching type
@@ -319,7 +319,7 @@ begin
       Result := create_binary_node(CopMathMul, '', current_line, create_node(CopNumber, '-1', current_line), prim_expr()); // accept  -a
   end
   else
-    LogError('Unexpected primary token ''' + token.s + '''', token.line, -1);
+    LogError('Unexpected primary token ''' + token.s + '''', token.line, Cunknown_operation);
 end;
 
 // order of math operations is set by the order of procedure calls
@@ -552,9 +552,9 @@ begin
 
   // create dummy token for easier error handling...
   error_token := TToken.Create;
-  error_token.id := CopInvalid; // unknown token
-  error_token.s := '<EOF>'; // unknown string
-  error_token.line := -1; // unknown line
+  error_token.id := CopInvalid; // invalid token
+  error_token.s := '<EOF>'; // invalid string
+  error_token.line := Cunknown_line; // unknown line
 
   rootNode := create_node(CopCommandBlock, '', 0); // encase the whole code in a begin-end block...
 
