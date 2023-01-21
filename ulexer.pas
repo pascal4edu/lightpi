@@ -62,11 +62,10 @@ end;
 var id: Byte;
     token: TToken;
     nest_depth, current_line: Integer;
-    inside_string: Boolean;
 begin
   s := get_ch;
 
-  if lpi_is_alpha(s[1]) then // Identifier: keywords, variables, functions
+  if (lpi_is_alpha(s[1])) or (s[1] = '_') then // Identifier: keywords, variables, functions
   begin
     id := CtokenIdentifier;
     while ((lpi_is_alpha(next_ch)) or (lpi_is_numeric(next_ch)) or (next_ch = '_')) do s := s + get_ch;
@@ -122,25 +121,36 @@ begin
     end;
   end
   else
-  if s[1] = '{' then // multi line comment: does also handle { messages.Add('}'); }, (* comment *) are NOT supported!
+  if s[1] = '{' then // multi line comment
   begin
     id := CtokenComment;
     nest_depth := 1;
-    inside_string := false;
 
     while ((nest_depth > 0) and (next_ch <> #0)) do
     begin
       get_ch;
-      if next_ch = '''' then inside_string := not inside_string;
 
-      if not inside_string then
-      begin
-        if next_ch = '{' then inc(nest_depth);
-        if next_ch = '}' then dec(nest_depth);
-      end;
+      if next_ch = '{' then inc(nest_depth);
+      if next_ch = '}' then dec(nest_depth);
     end;
 
     get_ch; // get ending }
+  end
+  else
+  if (s[1] = '(') and (next_ch = '*') then // "classic" multi line comment
+  begin
+    id := CtokenComment;
+    nest_depth := 1;
+
+    while ((nest_depth > 0) and (next_ch <> #0)) do
+    begin
+      s := get_ch;
+
+      if (s[1] = '(') and (next_ch = '*') then inc(nest_depth);
+      if (s[1] = '*') and (next_ch = ')') then dec(nest_depth);
+    end;
+
+    get_ch; // get ending )
   end
   else id := CtokenSingle; // single token: ( ) ;
 

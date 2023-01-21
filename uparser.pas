@@ -306,16 +306,18 @@ begin
   if (accept('+')) then
     Result := prim_expr() 
   else
-  // special case for sign e.g. a := -x; the lexer adds a multiplication node so cases like -x become -1 * x
   if (accept('-')) then
   begin
     token := preview_token;
+    // is it a number? just add the sign...
     if token.id = CtokenNumber then
     begin
       Result := create_node(CopNumber, '-' + token.s, current_line); // accept negative Number -0123.4
       read_token;
     end
     else 
+      // special case for variables e.g. a := -x;
+      // the parser adds a multiplication node so cases like -x become -1 * x
       Result := create_binary_node(CopMathMul, '', current_line, create_node(CopNumber, '-1', current_line), prim_expr()); // accept  -a
   end
   else
@@ -548,7 +550,7 @@ begin
     messages.Add('*** Parser ***');
   end;
 
-  current_line := 0;
+  current_line := Cunknown_line;
 
   // create dummy token for easier error handling...
   error_token := TToken.Create;
