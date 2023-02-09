@@ -443,6 +443,7 @@ end;
 // recognizes a statement like a "begin end" block or a "for to do" loop
 function statement: TASTTreeNode;
 var tempNode: TASTTreeNode;
+    temp_s: AnsiString;
 begin
   Result := nil;
 
@@ -526,14 +527,20 @@ begin
   end
   else
   begin
+    temp_s := preview_token.s; // cache last token for error messages
+
+    // parses variables, however result is not allowed to be a single variable at statement level
+    // e.g. a := 5; is allowed a; is not!
     Result := expr();
 
     if isError then Exit;
 
-    // exception for everything not needing a ; after it like if a = 5 then, for i := 1 to 5 do etc.
-    // else and then statement are needed here aswell, because conditions can contain statements like if isNumber(x) then
-    // and after the statement a ; is required, or in this case not required...
-    if not (peek('then') or peek('else') or peek('do') or peek('to')) then expect(';');
+    if Result.operation = CopVariable then
+      LogError('Unexpected "' + temp_s + '"', current_line, Cunknown_operation);
+
+
+    // else statement is need because if true then x := 5 else x := 7; is possible!
+    if not (peek('else')) then expect(';');
   end;
 end;
 
