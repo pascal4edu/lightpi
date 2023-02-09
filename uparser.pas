@@ -529,13 +529,14 @@ begin
   begin
     temp_s := preview_token.s; // cache last token for error messages
 
-    // parses variables, however result is not allowed to be a single variable at statement level
-    // e.g. a := 5; is allowed a; is not!
+    // parses variables, however result is not allowed to be a single variable or expression
+    // like add, mul etc at statement level e.g. a := 5; is allowed a; / a + 1; a or b; etc. is not!
     Result := expr();
 
     if isError then Exit;
 
-    if Result.operation = CopVariable then
+    // only assign and internal functions are allowed...
+    if not ((Result.operation = CopAssign) or (Result.operation = CopRound)) then
       LogError('Unexpected "' + temp_s + '"', current_line, Cunknown_operation);
 
 
