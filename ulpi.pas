@@ -104,23 +104,20 @@ begin
 end;
 
 function TLightPascalInterpreter.GetMessages(clear: Boolean = False): TStringList;
-var i: Integer;
-    sl: TStringList;
+var s: AnsiString;
 begin
-  sl := TStringList.Create;
+  Result := TStringList.Create;
 
-  for i := 0 to lexer.messages.Count - 1 do
-    sl.Add(lexer.messages[i]);
+  for s in lexer.messages do
+    Result.Add(s);
 
-  for i := 0 to parser.messages.Count - 1 do
-    sl.Add(parser.messages[i]);
+  for s in parser.messages do
+    Result.Add(s);
 
-  for i := 0 to interpreter.messages.Count - 1 do
-    sl.Add(interpreter.messages[i]);
+  for s in interpreter.messages do
+    Result.Add(s);
 
   if clear then ClearMessages;
-
-  Result := sl;
 end;
 
 
