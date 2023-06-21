@@ -67,7 +67,6 @@ end;
 procedure TForm1.ButtonExecClick(Sender: TObject);
 var i: Integer;
     lpi: TLightPascalInterpreter;
-    code: AnsiString;
     messages: TStringList;
 
 begin
@@ -77,14 +76,9 @@ begin
   else
     isExecuting := true;
 
-  // glue source editor lines together
-  code := '';
-  for i := 0 to SynEdit1.Lines.Count - 1 do
-    code := code + SynEdit1.Lines[i] + LineEnding;
-
   // create and launch the interpreter
   lpi := TLightPascalInterpreter.Create(CB_Debug.Checked);
-  lpi.Load(code);
+  lpi.Load(SynEdit1.Lines.Text);
   lpi.Execute;
 
   // print out any messages
