@@ -540,7 +540,7 @@ begin
       LogError('Unexpected "' + temp_s + '"', current_line, Cunknown_operation);
 
 
-    // else statement is need because if true then x := 5 else x := 7; is possible!
+    // exception for else, to accept code like this: if true then x := 5 else x := 7;
     if not (peek('else')) then expect(';');
   end;
 end;
