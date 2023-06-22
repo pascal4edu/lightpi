@@ -188,7 +188,7 @@ Every expression procedure first calls the procedure one level above itself and 
 After the procedure returns, the next match is attempted. Anything matching inside the levels above the current procedure
 was already parsed and is out of the way in the token list. For example a for statement parses "<for> ... <:=> ... <to> ... <do>"
 but it doesn't parse the expressions like variables or math equations. It is calling the according procedures above it instead,
-like prim_expr (for variables) and add_expr (for math expressions).
+like prim_expr() (for variables) and add_expr() (for math expressions). The whole process starts at the bottom with statement().
 
 # A more detailed breakdown of "for i := 1 to 2+3 do foobar;"
 
@@ -197,11 +197,11 @@ the variable. The check if it really was a variable is done later, when building
 and the code goes back to the statement. The next token is expected to be <:=>, no exceptions. Luckily it is there and the parser
 is fetching the beginning of the loop range, which is the primary expression CtokenNumber <1>.
 
-The code goes back to the statement and has the choice between <to> and <downto> as token, of which <to> is there. The final
-expression is the end of the loop range, which is at first a simple CtokenNumber <2>, but it matches add_expr; on the way back and
-recognizes the <+>. The add_expr keeps looking for additional + or - and calls the next higher procedure to check for expressions
-like 4*5 or (4/2) etc. However the next expression is again a simple CtokenNumber <3> (and no + or -). The code returns and
-expects <do> as token, which is there.
+The code goes back to the statement and expects <to>, which is there. The final expression is the end of the loop range,
+which is at first a simple CtokenNumber <2>, but it matches add_expr() on the way back and recognizes the <+>.
+add_expr() keeps looking for additional + or - and calls the next higher function to check for expressions
+like 4*5 or (4/2) etc. However the next expression is again a simple CtokenNumber <3>.
+The code returns and expects <do> as token, which is there.
 
 Finally the next statement is read within the for statement, which could be a begin / end block, a procedure call <foobar> or another loop.
 If the statement was read successfully, the code returns to the main loop and tries to read the next statement.

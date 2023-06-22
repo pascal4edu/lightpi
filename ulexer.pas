@@ -8,35 +8,35 @@ uses Classes, SysUtils, ulist, uerror;
 
 type TLPI_Lexer = class(TLPI_ErrorMessage)
        public
-         function execute(fname: AnsiString): TLightList;
+         function execute(input_string: AnsiString): TLightList;
      end;
 
 implementation
 
 uses uconstants, utypes, uutils;
 
-function TLPI_Lexer.execute(fname: AnsiString): TLightList;
+function TLPI_Lexer.execute(input_string: AnsiString): TLightList;
 var c: Char;
     line: Integer;
 
-// preview next char
+// preview next character
 function next_ch: Char;
 begin
   Result := c;
 end;
 
-// return buffer and fill it with the next char from file
+// return buffer and fill it with the next character
 function get_ch: Char;
 begin
   if c = #10 then inc(line); // detect line feeds in Unix AND Windows
 
   Result := c;
 
-  if fname = '' then c := #0
+  if input_string = '' then c := #0 // #0 is the internal symbol used for end of file / input
   else
   begin
-    c := fname[1];
-    Delete(fname, 1, 1);
+    c := input_string[1];
+    Delete(input_string, 1, 1);
   end;
 end;
 
@@ -45,7 +45,7 @@ begin
   while (lpi_is_whitespace(next_ch)) do get_ch;
 end;
 
-// recognizes and reads (= deletes from input stream) a token
+// recognizes and reads a token (read = also deletes the token from the input stream)
 procedure lpi_lex_read_token(tokenlist: TLightList);
 var s: AnsiString;
 
