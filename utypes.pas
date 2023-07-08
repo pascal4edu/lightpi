@@ -45,12 +45,16 @@ constructor TASTTreeNode.Create(param_operation: Byte; param_s: AnsiString; para
 begin
   operation := param_operation;
   s := param_s;
+  n := 0;
 
-  // automatically populate number field for caching
+  // try to automatically populate number field for caching
   if param_operation = CopNumber then
-    n := StrToFloatDef(s, 0, FormatSettings)
-  else
-    n := 0;
+  begin
+    if pos('$', s) > 0 then // check for hex numbers
+      n := StrToInt(s)
+    else
+      n := StrToFloatDef(s, 0, FormatSettings);
+  end;
 
   var_id := 0; // Default is function result
   line := param_line;

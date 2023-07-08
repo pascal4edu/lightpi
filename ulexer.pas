@@ -107,6 +107,17 @@ begin
     end;
   end
   else
+  if s[1] = '$' then // Hex Number: AA, F0 etc.
+  begin
+    id := CtokenSingle; // it might be a single $ instead
+
+    while (next_ch in ['0' .. '9', 'A' .. 'F']) do
+    begin
+      id := CtokenNumber; // found hex numbers, change type
+      s := s + get_ch;
+    end;
+  end
+  else
   if lpi_is_numeric(s[1]) then // Number: 78 or 0.234 leading + and - are ignored and evaluated later
   begin
     id := CtokenNumber;

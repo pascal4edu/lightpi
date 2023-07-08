@@ -69,6 +69,10 @@ begin
   run_test('x := -(2-9/3)*3;', 3);
 
   run_test('x := 1e3 + 1.2e+1 + 5E-3;', 1012.005);
+  run_test('x := $FF;', 255);
+  run_test('x := $ABCDEF;', 11259375);
+  run_test('x := $0A + +$F0;', 250);
+  run_test('x := $0A + -$F0;', -230);
 end;
 
 procedure testsuite_variables;
