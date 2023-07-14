@@ -588,7 +588,6 @@ begin
   begin
     if ClpiDebugMode and not isError then
     begin
-      messages.Add('');
       messages.Add('# Resulting Tree:');
       rootNode.debug(symbols, messages); // contains the root of the abstract syntax tree, parses the other nodes recursively
     end;

@@ -184,7 +184,11 @@ var i: Integer;
 begin
   Result := nil;
 
-  if ClpiDebugMode then messages.Add('*** Lexer ***');
+  if ClpiDebugMode then
+  begin
+    messages.Add('');
+    messages.Add('*** Lexer ***');
+  end;
 
   tokenlist := TLightList.Create;
   line := 1; // start at line 1 of file or string
@@ -212,7 +216,7 @@ begin
     for i := 0 to tokenlist.Count - 1 do
     begin
       with TToken(tokenlist.Items(i)) do
-        messages.Add(IntToStr(line) + ' ' + tokentostr(id) + ': ' + s);
+        messages.Add(padstring(IntToStr(line), 2, ' ', True) + ' ' + padstring(tokentostr(id), 11) + s);
     end;
   end;
 
