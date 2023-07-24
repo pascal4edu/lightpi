@@ -321,7 +321,7 @@ begin
       Result := create_binary_node(CopMathMul, '', current_line, create_node(CopNumber, '-1', current_line), prim_expr()); // accept  -a
   end
   else
-    LogError('Unexpected primary token ''' + token.s + '''', token.line, Cunknown_operation);
+    LogError('Unexpected ''' + token.s + '''', token.line, Cunknown_operation);
 end;
 
 // order of math operations is set by the order of procedure calls
