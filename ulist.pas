@@ -110,8 +110,6 @@ begin
 
   if index = 0 then AddFirst(item)
   else
-  if index = Count - 1 then Add(item)
-  else
   begin
     temp := GetElement(index);
 
