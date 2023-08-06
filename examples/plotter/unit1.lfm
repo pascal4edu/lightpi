@@ -1,0 +1,67 @@
+object Form1: TForm1
+  Left = 282
+  Height = 373
+  Top = 122
+  Width = 523
+  Caption = 'Plotter Demo'
+  ClientHeight = 373
+  ClientWidth = 523
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '1.6.4.0'
+  object Edit1: TEdit
+    Left = 16
+    Height = 23
+    Top = 336
+    Width = 400
+    TabOrder = 0
+    Text = '0.3*x*x*x - 4*x'
+  end
+  object Button1: TButton
+    Left = 432
+    Height = 25
+    Top = 336
+    Width = 75
+    Caption = '&Plot'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object Chart1: TChart
+    Left = 16
+    Height = 312
+    Top = 8
+    Width = 491
+    AxisList = <    
+      item
+        Minors = <>
+        Title.LabelFont.Orientation = 900
+      end    
+      item
+        Alignment = calBottom
+        Minors = <>
+      end>
+    BackColor = clWhite
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
+    )
+    DoubleBuffered = True
+    object Chart1FuncSeries1: TFuncSeries
+      Active = False
+      Extent.UseXMax = True
+      Extent.UseXMin = True
+      Extent.UseYMax = True
+      Extent.UseYMin = True
+      Extent.XMax = 10
+      Extent.XMin = -10
+      Extent.YMax = 10
+      Extent.YMin = -10
+      OnCalculate = Chart1FuncSeries1Calculate
+      Pen.Color = clRed
+      Pen.Width = 2
+    end
+  end
+end

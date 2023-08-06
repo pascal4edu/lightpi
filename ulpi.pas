@@ -53,6 +53,11 @@ begin
   else
     rootNode := nil;
 
+  // reset error state
+  lexer.isError := false;
+  parser.isError := false;
+  interpreter.isError := false;
+
   tokenlist := lexer.execute(s);
   if lexer.isError then Exit;
 

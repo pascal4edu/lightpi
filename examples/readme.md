@@ -9,3 +9,5 @@ This was the original inspiration for the creation of LPI. How to manage card ef
 # ide
 Interacting with an interpreter in realtime is the best way to explore new ideas, scripts and also learn more about this project. The entered code is automatically executed and can also be displayed as debug output with each interpreter stage visible! It can be quite mesmerizing to see your code getting transformed into an abstract syntax tree. Give it a try!
 
+# plotter
+Why stop at a calculator? Simply assign the entered formula to a variable and run the script with different inputs for x. Read the result back and you have a plotter.
