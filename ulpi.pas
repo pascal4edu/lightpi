@@ -35,6 +35,7 @@ uses sysutils, ulist;
 Constructor TLightPascalInterpreter.Create(debug: Boolean = false);
 begin
   ClpiDebugMode := debug;
+  rootNode := nil;
 
   lexer := TLPI_Lexer.Create;
   parser := TLPI_Parser.Create;
@@ -49,9 +50,7 @@ begin
 
   // was something already loaded?
   if rootNode <> nil then
-    FreeAndNil(rootNode)
-  else
-    rootNode := nil;
+    FreeAndNil(rootNode);
 
   // reset error state
   lexer.isError := false;

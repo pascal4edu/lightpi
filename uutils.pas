@@ -13,7 +13,8 @@ function lpi_is_whitespace(c: Char): Boolean;
 function tokentostr(id: Byte): AnsiString;
 function operationtostr(op: Byte): AnsiString;
 
-function padstring(s: AnsiString; l: Integer; ch: Char = #32; reverse: Boolean = false): AnsiString;
+function PadString(s: AnsiString; l: Integer; ch: Char = #32; reverse: Boolean = false): AnsiString;
+function MarkCount(number: Integer): AnsiString;
 
 implementation
 
@@ -89,18 +90,38 @@ begin
     CopNumber: Result := 'number';
     CopRound: Result := 'round';
     CopWriteln: Result := 'writeln';
-    else Result := '<Unknown Operation ID ' + IntToStr(op) + '!>';
+    else
+      Result := '<Unknown Operation ID ' + IntToStr(op) + '!>';
   end;
 end;
 
 // String padding...
-function padstring(s: AnsiString; l: Integer; ch: Char = #32; reverse: Boolean = false): AnsiString;
+function PadString(s: AnsiString; l: Integer; ch: Char = #32; reverse: Boolean = false): AnsiString;
 begin
   while Length(s) < l do
-  if reverse then s := ch + s
-             else s := s + ch;
+  if reverse then
+    s := ch + s
+  else
+    s := s + ch;
 
   Result := s;
+end;
+
+// add . separators...
+function MarkCount(number: Integer): AnsiString;
+var s: AnsiString;
+    i: Integer;
+begin
+  s := IntToStr(number);
+  Result := '';
+
+  for i := 1 to Length(s) do
+  begin
+    Result := Result + s[i];
+
+    if ((Length(s) - i) mod 3 = 0) and (i < Length(s)) then
+      Result := Result + '.';
+  end;
 end;
 
 end.

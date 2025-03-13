@@ -85,7 +85,7 @@ begin
     id := CtokenOperator;
     // only accumulate stuff like := <> >= etc, not -+ +- -- ++!
     if not lpi_is_math_operator(s[1]) then
-    while (lpi_is_operator(next_ch)) do s := s + get_ch;
+    while (lpi_is_operator(next_ch) and (not lpi_is_math_operator(next_ch))) do s := s + get_ch;
   end
   else
   if s[1] = '''' then // String: 'It''s working!'
@@ -121,7 +121,17 @@ begin
   if lpi_is_numeric(s[1]) then // Number: 78 or 0.234 leading + and - are ignored and evaluated later
   begin
     id := CtokenNumber;
-    while (lpi_is_numeric(next_ch) or (next_ch = '.')) do s := s + get_ch;
+
+    // skip any _ after the first number, allows for 100_000_000 notation
+    while (next_ch = '_') do get_ch;
+
+    while (lpi_is_numeric(next_ch) or (next_ch = '.')) do
+    begin
+      s := s + get_ch;
+
+      // skip any _ in the middle
+      while (next_ch = '_') do get_ch;
+    end;
 
     // check for exponent notation e.g. 1.234E4
     if match_and_get_ch('E') then

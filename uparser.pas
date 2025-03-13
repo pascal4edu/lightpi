@@ -112,10 +112,13 @@ end;
 // compares the string with the token, peek() does NOT read the token!
 function peek(s: AnsiString): Boolean; inline;
 begin
-  if tokenlist.Count < 1 then
-    Result := false
-  else
-    Result := (UpperCase(s) = UpperCase(preview_token.s));
+  Result := false;
+
+  if tokenlist.Count < 1 then Exit;
+
+  if preview_token.id = CtokenString then Exit; // don't match strings
+
+  Result := (UpperCase(s) = UpperCase(preview_token.s));
 end;
 
 // compares the string and reads (accepts) the token on a match
@@ -245,12 +248,6 @@ begin
     end;
 
     Result := create_node(CopString, temp_s, current_line); // pascal allows chaining without a +, like #13#10
-  end
-  else
-  if accept('not') then
-  begin
-    Result := create_node(CopLogicNot, '', current_line); // accept not
-    Result.children.Add(expr());
   end
   else
   if accept('true') then
@@ -400,13 +397,25 @@ begin
     Result := create_binary_node(CopCompareSmallerOrEqual, '', current_line, Result, add_expr()); // accept <=
 end;
 
+function prefix_expr: TASTTreeNode;
+begin
+  Result := nil;
+
+  if accept('not') then
+  begin
+    Result := create_node(CopLogicNot, '', current_line); // accept not
+    Result.children.Add(eq_expr());
+  end
+  else Result := eq_expr(); // otherwise continue
+end;
+
 // logic
 function logic_expr: TASTTreeNode;
 begin
   Result := nil;
 
   if isError then Exit;
-  Result := eq_expr();
+  Result := prefix_expr();
   if isError then Exit;
 
   current_line := preview_token.line;
