@@ -404,7 +404,7 @@ begin
   if accept('not') then
   begin
     Result := create_node(CopLogicNot, '', current_line); // accept not
-    Result.children.Add(eq_expr());
+    Result.children.Add(prefix_expr());
   end
   else Result := eq_expr(); // otherwise continue
 end;
