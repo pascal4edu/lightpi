@@ -14,12 +14,18 @@ type
 
   TForm1 = class(TForm)
     ButtonExec: TButton;
+    ButtonSave:TButton;
+    ButtonLoad:TButton;
     CB_AutoExec: TCheckBox;
     CB_Debug:TCheckBox;
     Memo1: TMemo;
+    OpenDialog1:TOpenDialog;
+    SaveDialog1:TSaveDialog;
     SynEdit1:TSynEdit;
     SynPasSyn1:TSynPasSyn;
     Timer_auto_execute: TTimer;
+    procedure ButtonLoadClick(Sender:TObject);
+    procedure ButtonSaveClick(Sender:TObject);
     procedure FormShow(Sender:TObject);
     procedure CB_DebugChange(Sender:TObject);
     procedure CB_AutoExecChange(Sender:TObject);
@@ -47,6 +53,18 @@ procedure TForm1.FormShow(Sender:TObject);
 begin
   isExecuting := false;
   SynEdit1.SetFocus;
+end;
+
+procedure TForm1.ButtonSaveClick(Sender:TObject);
+begin
+  if SaveDialog1.Execute then
+    SynEdit1.Lines.SaveToFile(SaveDialog1.FileName);
+end;
+
+procedure TForm1.ButtonLoadClick(Sender:TObject);
+begin
+  if OpenDialog1.Execute then
+    SynEdit1.Lines.LoadFromFile(OpenDialog1.FileName);
 end;
 
 procedure TForm1.CB_DebugChange(Sender:TObject);

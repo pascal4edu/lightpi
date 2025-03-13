@@ -1,18 +1,18 @@
 object Form1: TForm1
-  Left = 257
-  Height = 517
-  Top = 123
-  Width = 817
+  Left = 259
+  Height = 591
+  Top = 108
+  Width = 1066
   Caption = 'Basic IDE Demo'
-  ClientHeight = 517
-  ClientWidth = 817
+  ClientHeight = 591
+  ClientWidth = 1066
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '3.6.0.0'
   object Memo1: TMemo
-    Left = 440
-    Height = 464
+    Left = 584
+    Height = 544
     Top = 8
-    Width = 368
+    Width = 472
     Font.CharSet = ANSI_CHARSET
     Font.Height = -11
     Font.Name = 'Courier New'
@@ -24,30 +24,30 @@ object Form1: TForm1
     TabOrder = 0
   end
   object ButtonExec: TButton
-    Left = 440
+    Left = 584
     Height = 25
-    Top = 479
+    Top = 559
     Width = 75
     Caption = 'E&xecute'
-    OnClick = ButtonExecClick
     TabOrder = 1
+    OnClick = ButtonExecClick
   end
   object CB_AutoExec: TCheckBox
-    Left = 536
+    Left = 832
     Height = 19
-    Top = 480
-    Width = 116
+    Top = 560
+    Width = 115
     Caption = 'auto execute code'
     Checked = True
-    OnChange = CB_AutoExecChange
     State = cbChecked
     TabOrder = 2
+    OnChange = CB_AutoExecChange
   end
   inline SynEdit1: TSynEdit
     Left = 8
-    Height = 496
+    Height = 576
     Top = 8
-    Width = 416
+    Width = 568
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
@@ -544,24 +544,54 @@ object Form1: TForm1
     end
   end
   object CB_Debug: TCheckBox
-    Left = 672
+    Left = 952
     Height = 19
-    Top = 480
-    Width = 109
+    Top = 560
+    Width = 107
     Caption = 'show debug info'
-    OnChange = CB_DebugChange
     TabOrder = 4
+    OnChange = CB_DebugChange
+  end
+  object ButtonSave: TButton
+    Left = 664
+    Height = 25
+    Top = 559
+    Width = 75
+    Caption = '&Save'
+    TabOrder = 5
+    OnClick = ButtonSaveClick
+  end
+  object ButtonLoad: TButton
+    Left = 744
+    Height = 25
+    Top = 559
+    Width = 75
+    Caption = '&Load'
+    TabOrder = 6
+    OnClick = ButtonLoadClick
   end
   object Timer_auto_execute: TTimer
     OnTimer = Timer_auto_executeTimer
-    left = 576
-    top = 416
+    Left = 200
+    Top = 64
   end
   object SynPasSyn1: TSynPasSyn
     Enabled = False
     CompilerMode = pcmDelphi
     NestedComments = False
-    left = 96
-    top = 432
+    TypeHelpers = True
+    StringMultilineMode = []
+    Left = 96
+    Top = 64
+  end
+  object OpenDialog1: TOpenDialog
+    Filter = 'Pascal Source|*.pas'
+    Left = 96
+    Top = 143
+  end
+  object SaveDialog1: TSaveDialog
+    Filter = 'Pascal Source|*.pas'
+    Left = 96
+    Top = 224
   end
 end
